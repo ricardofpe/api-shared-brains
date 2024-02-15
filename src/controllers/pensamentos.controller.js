@@ -5,24 +5,6 @@ const createPensamentos = async (req, res) => {
 
     try{
 
-        const {authorization} = req.headers
-
-        if(!authorization){
-            return res.send(401)
-        }
-
-        const parts = authorization.split(" ")
-
-        const [schema, token] = parts
-
-        if(parts.length !== 2){
-            return res.send(401)
-        }
-
-        if(schema !== "Bearer"){
-            return res.send(401)
-        }
-
         const {title, text} = req.body
 
         if(!title || !text){
@@ -34,7 +16,7 @@ const createPensamentos = async (req, res) => {
 
             title,
             text,
-            user: {_id: "65c68630c8bc6fc0bb31c5a2"}
+            user: req.userId
 
         })
         res.send(201)
