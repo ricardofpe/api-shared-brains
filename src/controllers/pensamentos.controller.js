@@ -1,4 +1,4 @@
-import { createServicePensamentos, findAllPensamentosService } from "../services/pensamentos.service.js"
+import { createServicePensamentos, findAllPensamentosService, countPensamentos } from "../services/pensamentos.service.js"
 
 
 const createPensamentos = async (req, res) => {
@@ -32,13 +32,51 @@ const createPensamentos = async (req, res) => {
 const findAllPensamentos = async (req, res) => {
 
     try{
+
+        let{limit, offset} = req.query
+
+        limit = Number(limit)
+        offset = Number(offset)
+
+        if(!limit){
+            limit = 5
+        }
         
-    const pensamentos = await findAllPensamentosService();
-    
+        
+        if(!offset){
+            offset = 0
+        }
+
+    const pensamentos = await findAllPensamentosService(offset, limit);
+    const total = await countPensamentos();
+    const currentUrl = req.baseUrl
+
+    const next = offset + limit;
+    const nextUrl = next < total ? `${currentUrl}?limit=${limit}&offset=${next}` : null
+
+    const previous = offset - limit < 0 ? null : offset - limit
+    const previousUrl = previous != null ? `${currentUrl}?limit=${limit}&offset=${previous}` : null
+
  if(pensamentos.length === 0){
     return res.status(400).send({message: "There are no registred pensamentos"})
    }
-    res.send(pensamentos)
+    res.send({
+        nextUrl,
+        previousUrl,
+        limit,
+        offset,
+        total,
+
+        results : pensamentos.map(pensamentosItem => ({
+            id: pensamentosItem._id,
+            title: pensamentosItem.title,
+            text: pensamentosItem.text,
+            likes: pensamentosItem.likes,
+            comments: pensamentosItem.comments,
+            name : pensamentosItem.user.name,
+            username: pensamentosItem.user.username
+        }))
+    })
 
     }catch(err){
         res.status(500).send(err.message)
