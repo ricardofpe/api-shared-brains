@@ -1,4 +1,4 @@
-import { createServicePensamentos, findAllPensamentosService, countPensamentos } from "../services/pensamentos.service.js"
+import { createServicePensamentos, findAllPensamentosService, countPensamentos, topPensamentoService, findByIdService } from "../services/pensamentos.service.js"
 
 
 const createPensamentos = async (req, res) => {
@@ -85,4 +85,55 @@ const findAllPensamentos = async (req, res) => {
 
 }
 
-export {createPensamentos, findAllPensamentos }
+const topPensamento = async (req,res) => {
+
+    try{ const pensamento = await topPensamentoService();
+
+    if(!pensamento){
+        return res.status(400).send({message:"There is no registred post"})
+    }
+
+    res.send({
+        pensamentos:{
+        id: pensamento._id,
+            title: pensamento.title,
+            text: pensamento.text,
+            likes: pensamento.likes,
+            comments: pensamento.comments,
+            name : pensamento.user.name,
+            username: pensamento.user.username
+        }
+    })
+}catch(err){
+    res.status(500).send(err.message)
+}
+
+}
+
+const findById = async(req,res) => {
+
+    try{
+        const {id} = req.params
+
+        const pensamento = await findByIdService(id)
+
+        return res.send({
+            pensamentos:{
+                id: pensamento._id,
+                    title: pensamento.title,
+                    text: pensamento.text,
+                    likes: pensamento.likes,
+                    comments: pensamento.comments,
+                    name : pensamento.user.name,
+                    username: pensamento.user.username
+                }
+
+        })
+
+    }catch(err){
+    res.status(500).send(err.message)
+}
+
+}
+
+export {createPensamentos, findAllPensamentos, topPensamento, findById }
