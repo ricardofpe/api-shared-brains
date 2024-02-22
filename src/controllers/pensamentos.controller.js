@@ -1,4 +1,4 @@
-import { createServicePensamentos, findAllPensamentosService, countPensamentos, topPensamentoService, findByIdService, searchByTitleService, byUserService, updateService } from "../services/pensamentos.service.js"
+import { createServicePensamentos, findAllPensamentosService, countPensamentos, topPensamentoService, findByIdService, searchByTitleService, byUserService, updateService, eraseService } from "../services/pensamentos.service.js"
 
 
 const createPensamentos = async (req, res) => {
@@ -230,4 +230,31 @@ try{
 
 }
 
-export {createPensamentos, findAllPensamentos, topPensamento, findById,searchByTitle, byUser, update }
+const erase = async(req, res) => {
+
+    try{
+
+        const {id} = req.params
+
+      
+         const pensamento = await findByIdService(id)
+      
+            
+         if(String(pensamento.user._id) !==  String(req.userId)){
+          return res.status(400).send({
+              message: "You didn't delete this post"
+          })
+         }
+
+         await eraseService(id)
+
+         return res.send({message: "Post deleted sucessfully"})
+
+    }catch(err){
+    res.status(500).send(err.message)
+}
+
+
+}
+
+export {createPensamentos, findAllPensamentos, topPensamento, findById,searchByTitle, byUser, update, erase }

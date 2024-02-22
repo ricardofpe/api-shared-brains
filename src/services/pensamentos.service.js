@@ -19,6 +19,8 @@ const byUserService = (id) => Pensamentos.find({user: id}).sort({_id: -1}).popul
 const updateService = (id, title, text) => 
 Pensamentos.findOneAndUpdate({_id: id}, {title, text}, {rawResult: true,})
 
+const eraseService = (id) => Pensamentos.findByIdAndDelete({_id: id})
+
 export  {
     createServicePensamentos,
     findAllPensamentosService,
@@ -27,5 +29,6 @@ export  {
     findByIdService,
     searchByTitleService,
     byUserService, 
-    updateService
+    updateService,
+    eraseService
 }
