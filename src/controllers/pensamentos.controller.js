@@ -1,4 +1,4 @@
-import { createServicePensamentos, findAllPensamentosService, countPensamentos, topPensamentoService, findByIdService, searchByTitleService, byUserService, updateService, eraseService, likePensamentoService, deleteLikePensamentoService, addCommentService } from "../services/pensamentos.service.js"
+import { createServicePensamentos, findAllPensamentosService, countPensamentos, topPensamentoService, findByIdService, searchByTitleService, byUserService, updateService, eraseService, likePensamentoService, deleteLikePensamentoService, addCommentService, deleteCommentService } from "../services/pensamentos.service.js"
 
 
 export const createPensamentos = async (req, res) => {
@@ -284,7 +284,7 @@ export const addComment = async (req,res) =>{
 
         const{id} = req.params
         const userId = req.userId
-        const comment = req.body
+        const {comment} = req.body
 
         if(!comment){
             return res.status(400).send({
@@ -300,3 +300,30 @@ export const addComment = async (req,res) =>{
 }
 }
 
+export const deleteComment = async (req,res) =>{
+   
+    try{
+
+        
+        const{idPensamento, idComment} = req.params
+        const userId = req.userId
+    
+
+       
+
+      const commentDeleted =  await deleteCommentService(idPensamento, idComment ,userId)
+
+      const commentFinder = commentDeleted.comments.find(
+        comment => comment.idComment === idComment
+      )
+
+      if(commentFinder.userId !== userId){
+        return res.status(400).send({message:"You can't delete this comment"})
+      }
+
+        res.status(200).send({message:"Comment successfully removed!"})
+
+    }catch(err){
+    res.status(500).send(err.message)
+}
+}

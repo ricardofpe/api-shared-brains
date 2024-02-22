@@ -43,6 +43,13 @@ const addCommentService = (idPensamento, comment, userId) => {
     )
 }
 
+const deleteCommentService = (idPensamento, idComment, userId) =>
+Pensamentos.findByIdAndUpdate(
+    {_id: idPensamento},
+    {$pull: {comments: {idComment, userId}}}
+    
+    )
+
 export  {
     createServicePensamentos,
     findAllPensamentosService,
@@ -55,5 +62,6 @@ export  {
     eraseService,
     likePensamentoService,
     deleteLikePensamentoService,
-    addCommentService
+    addCommentService,
+    deleteCommentService
 }
