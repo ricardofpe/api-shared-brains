@@ -31,6 +31,18 @@ const deleteLikePensamentoService = (idPensamento, userId) => Pensamentos.findOn
     {$pull: {likes: {userId}}}
 )
 
+const addCommentService = (idPensamento, comment, userId) => {
+  let idComment = Math.floor(Date.now() * Math.random()).toString(36);
+ return   Pensamentos.findOneAndUpdate(
+    {_id: idPensamento},
+    {
+        $push: {
+        comments:{ idComment, userId, comment,
+    createdAt: new Date()}}
+}
+    )
+}
+
 export  {
     createServicePensamentos,
     findAllPensamentosService,
@@ -42,5 +54,6 @@ export  {
     updateService,
     eraseService,
     likePensamentoService,
-    deleteLikePensamentoService
+    deleteLikePensamentoService,
+    addCommentService
 }

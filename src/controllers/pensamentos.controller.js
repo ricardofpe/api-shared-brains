@@ -1,7 +1,7 @@
-import { createServicePensamentos, findAllPensamentosService, countPensamentos, topPensamentoService, findByIdService, searchByTitleService, byUserService, updateService, eraseService, likePensamentoService, deleteLikePensamentoService } from "../services/pensamentos.service.js"
+import { createServicePensamentos, findAllPensamentosService, countPensamentos, topPensamentoService, findByIdService, searchByTitleService, byUserService, updateService, eraseService, likePensamentoService, deleteLikePensamentoService, addCommentService } from "../services/pensamentos.service.js"
 
 
-const createPensamentos = async (req, res) => {
+export const createPensamentos = async (req, res) => {
 
     try{
 
@@ -29,7 +29,7 @@ const createPensamentos = async (req, res) => {
 
 }
 
-const findAllPensamentos = async (req, res) => {
+export const findAllPensamentos = async (req, res) => {
 
     try{
 
@@ -85,7 +85,7 @@ const findAllPensamentos = async (req, res) => {
 
 }
 
-const topPensamento = async (req,res) => {
+export const topPensamento = async (req,res) => {
 
     try{ const pensamento = await topPensamentoService();
 
@@ -110,7 +110,7 @@ const topPensamento = async (req,res) => {
 
 }
 
-const findById = async(req,res) => {
+export const findById = async(req,res) => {
 
     try{
         const {id} = req.params
@@ -136,7 +136,7 @@ const findById = async(req,res) => {
 
 }
 
-const searchByTitle = async (req, res) => {
+export const searchByTitle = async (req, res) => {
 
     try{
 
@@ -168,8 +168,8 @@ const searchByTitle = async (req, res) => {
 }
 
 }
-
-const byUser = async (req, res) => {
+ 
+export const byUser = async (req, res) => {
 
     try{
         
@@ -195,7 +195,7 @@ const byUser = async (req, res) => {
 
 }
 
-const update = async (req, res) => {
+export const update = async (req, res) => {
 
 try{
 
@@ -230,7 +230,7 @@ try{
 
 }
 
-const erase = async(req, res) => {
+export const erase = async(req, res) => {
 
     try{
 
@@ -258,7 +258,7 @@ const erase = async(req, res) => {
 }
 
 
-const likePensamento = async (req, res) =>{
+export const likePensamento = async (req, res) =>{
 
     try{
 
@@ -278,4 +278,25 @@ const likePensamento = async (req, res) =>{
 
 }
 
-export {createPensamentos, findAllPensamentos, topPensamento, findById,searchByTitle, byUser, update, erase, likePensamento }
+export const addComment = async (req,res) =>{
+
+    try{
+
+        const{id} = req.params
+        const userId = req.userId
+        const comment = req.body
+
+        if(!comment){
+            return res.status(400).send({
+                message: "Write a message to comment!"
+            })
+        }
+
+        await addCommentService(id, comment, userId)
+
+        res.status(200).send({message:"Comment successfully completed!"})
+    }catch(err){
+    res.status(500).send(err.message)
+}
+}
+
