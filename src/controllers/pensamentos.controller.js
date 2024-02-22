@@ -1,4 +1,4 @@
-import { createServicePensamentos, findAllPensamentosService, countPensamentos, topPensamentoService, findByIdService } from "../services/pensamentos.service.js"
+import { createServicePensamentos, findAllPensamentosService, countPensamentos, topPensamentoService, findByIdService, searchByTitleService, byUserService, updateService } from "../services/pensamentos.service.js"
 
 
 const createPensamentos = async (req, res) => {
@@ -136,4 +136,98 @@ const findById = async(req,res) => {
 
 }
 
-export {createPensamentos, findAllPensamentos, topPensamento, findById }
+const searchByTitle = async (req, res) => {
+
+    try{
+
+        const {title} = req.query;
+
+        const pensamento = await searchByTitleService(title);
+
+        if(pensamento.length === 0){
+            return res
+            .status(400)
+            .send({message: "There are no pensamentos with this title"})
+        }
+
+          return res.send({
+            results : pensamento.map(pensamentosItem => ({
+                id: pensamentosItem._id,
+                title: pensamentosItem.title,
+                text: pensamentosItem.text,
+                likes: pensamentosItem.likes,
+                comments: pensamentosItem.comments,
+                name : pensamentosItem.user.name,
+                username: pensamentosItem.user.username
+            }))
+        })
+
+
+    }catch(err){
+    res.status(500).send(err.message)
+}
+
+}
+
+const byUser = async (req, res) => {
+
+    try{
+        
+        const id = req.userId
+        const pensamento = await byUserService(id)
+
+        return res.send({
+            results : pensamento.map(pensamentosItem => ({
+                id: pensamentosItem._id,
+                title: pensamentosItem.title,
+                text: pensamentosItem.text,
+                likes: pensamentosItem.likes,
+                comments: pensamentosItem.comments,
+                name : pensamentosItem.user.name,
+                username: pensamentosItem.user.username
+            }))
+        })
+
+    }catch(err){
+    res.status(500).send(err.message)
+}
+
+
+}
+
+const update = async (req, res) => {
+
+try{
+
+        const {title, text} = req.body
+        const {id} = req.params
+
+        
+  if(!title && !text){
+ return   res.status(400).send({message:"Submit at least one field for update the post"})
+   }
+
+   const pensamento = await findByIdService(id)
+
+
+
+   if(String(pensamento.user._id) !==  String(req.userId)){
+    return res.status(400).send({
+        message: "You didn't update this post"
+    })
+   }
+
+   await updateService(id, title, text)
+
+   return res.send({message : "Post sucessfully update!"})
+
+
+
+}catch(err){
+    res.status(500).send(err.message)
+}
+
+
+}
+
+export {createPensamentos, findAllPensamentos, topPensamento, findById,searchByTitle, byUser, update }

@@ -10,10 +10,22 @@ const topPensamentoService = () => Pensamentos.findOne().sort({_id: -1}).populat
 
 const findByIdService = (id) => Pensamentos.findById(id).populate("user") 
 
+const searchByTitleService = (title) => Pensamentos.find({
+    title: {$regex: `${title || ""}`, $options: "i"},
+}).sort({_id: -1}).populate("user")
+
+const byUserService = (id) => Pensamentos.find({user: id}).sort({_id: -1}).populate("user")
+
+const updateService = (id, title, text) => 
+Pensamentos.findOneAndUpdate({_id: id}, {title, text}, {rawResult: true,})
+
 export  {
     createServicePensamentos,
     findAllPensamentosService,
     countPensamentos,
     topPensamentoService,
-    findByIdService
+    findByIdService,
+    searchByTitleService,
+    byUserService, 
+    updateService
 }
