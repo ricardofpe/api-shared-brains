@@ -21,6 +21,16 @@ Pensamentos.findOneAndUpdate({_id: id}, {title, text}, {rawResult: true,})
 
 const eraseService = (id) => Pensamentos.findByIdAndDelete({_id: id})
 
+const likePensamentoService = (idPensamento, userId) => Pensamentos.findOneAndUpdate(
+    {_id: idPensamento, "likes.userId": {$nin: [userId]}} ,
+    {$push: {likes: {userId, created: new Date()}}}
+)
+
+const deleteLikePensamentoService = (idPensamento, userId) => Pensamentos.findOneAndUpdate(
+    {_id: idPensamento} ,
+    {$pull: {likes: {userId}}}
+)
+
 export  {
     createServicePensamentos,
     findAllPensamentosService,
@@ -30,5 +40,7 @@ export  {
     searchByTitleService,
     byUserService, 
     updateService,
-    eraseService
+    eraseService,
+    likePensamentoService,
+    deleteLikePensamentoService
 }

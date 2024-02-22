@@ -1,4 +1,4 @@
-import { createServicePensamentos, findAllPensamentosService, countPensamentos, topPensamentoService, findByIdService, searchByTitleService, byUserService, updateService, eraseService } from "../services/pensamentos.service.js"
+import { createServicePensamentos, findAllPensamentosService, countPensamentos, topPensamentoService, findByIdService, searchByTitleService, byUserService, updateService, eraseService, likePensamentoService, deleteLikePensamentoService } from "../services/pensamentos.service.js"
 
 
 const createPensamentos = async (req, res) => {
@@ -257,4 +257,25 @@ const erase = async(req, res) => {
 
 }
 
-export {createPensamentos, findAllPensamentos, topPensamento, findById,searchByTitle, byUser, update, erase }
+
+const likePensamento = async (req, res) =>{
+
+    try{
+
+        const {id} = req.params
+        const userId = req.userId
+
+        const pensamentoLiked = await likePensamentoService(id, userId)
+        if(!pensamentoLiked){
+            await deleteLikePensamentoService(id, userId)
+            return res.status(200).send({message: "Like successfully removed"})
+        }
+        res.send({message: "Like done successfully"})
+
+    }catch(err){
+    res.status(500).send(err.message)
+}
+
+}
+
+export {createPensamentos, findAllPensamentos, topPensamento, findById,searchByTitle, byUser, update, erase, likePensamento }
