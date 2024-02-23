@@ -1,5 +1,5 @@
 {
-  "name": "thoughts-pensantes",
+  "name": "shared-brains",
   "version": "1.0.0",
   "description": "Projeto de uma aplicação com Node.js, Express, React e MongoDb",
   "main": "index.js",

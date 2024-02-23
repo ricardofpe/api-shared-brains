@@ -8,10 +8,19 @@
         },
         "version": "1.0.0"
     },
-    "servers": [{
+    "servers": [
+      {
+      "url":"https://shared-brains.onrender.com",
+      "description": "Render Server"
+     },
+
+      {
         "url": "http://localhost:3000",
         "description": "Local Server"
-    }],
+    }
+    
+   
+  ],
     "paths": {
         "/user/": {
             "post": {
