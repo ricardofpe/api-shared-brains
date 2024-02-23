@@ -1,0 +1,678 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Shared Brains API Documentation",
+        "description": "This documentation allows you to consult the API endpoints and test all available routes. Don't forget to register and perform authorization.",
+        "contact": {
+            "email": "ricardofonseca_1@hotmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [{
+        "url": "http://localhost:3000",
+        "description": "Local Server"
+    }],
+    "paths": {
+        "/user/": {
+            "post": {
+                "summary": "Create a new user",
+                "description": "Route responsible for creating a new user",
+                "tags": ["Users"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            },
+                            "examples": {
+                                "Users": {
+                                    "value": {
+                                        "name": "RicardoTeste",
+                                        "username": "ricardofpeteste",
+                                        "email": "ricardofpteste@gmail.com",
+                                        "password": "123456"
+                                        
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Not Found"
+                    },
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
+          "get": {
+            "summary": "Search all users",
+            "description": "Route responsible for fetching all users",
+            "tags": ["Users"],
+            "security": [{ "bearerAuth": [] }],
+            "responses": {
+              "401": {
+                "description": "Unauthorized"
+              },
+              "400": {
+                "description": "Not Found"
+              },
+              "200": {
+                "description": "OK",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/User"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+       
+        "/user/{id}/": {
+          "get": {
+            "summary": "Search user by id",
+            "description": "Route responsible for searching for user by id",
+            "tags": ["Users"],
+            "security": [{ "bearerAuth": [] }],
+            "parameters": [
+              {
+                "in": "path",
+                "name": "id",
+                "type": "string",
+                "description": "User ID",
+                "required": true
+              }
+            ],
+            "responses": {
+              "401": {
+                "description": "Unauthorized"
+              },
+              "400": {
+                "description": "Not Found"
+              },
+              "200": {
+                "description": "OK",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/user/{id}": {
+          "patch": {
+            "summary": "Update user by id",
+            "description": "Route responsible for editing the user by id",
+            "tags": ["Users"],
+            "security": [{ "bearerAuth": [] }],
+            "parameters": [
+              {
+                "in": "path",
+                "name": "id",
+                "type": "string",
+                "description": "User ID",
+                "required": true
+              }
+            ],
+            "requestBody": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  },
+                  "examples": {
+                    "Users": {
+                      "value": {
+                        "name": "RicardoTeste"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "responses": {
+              "401": {
+                "description": "Unauthorized"
+              },
+              "400": {
+                "description": "Not Found"
+              },
+              "200": {
+                "description": "OK",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/auth": { "post": {
+          "summary": "Login to Shared Brains",
+          "description": "Route responsible for logging in a registered user",
+          "tags": ["Auth"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "User": {
+                    "value": {
+                      "email": "ricardofpteste@gmail.com",
+                      "password": "123456"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "400": {
+              "description": "Not Found"
+            },
+            "200": {
+              "description": "OK"
+            }
+          }
+        }},
+        "/thoughts/": { "post": {
+          "summary": "Create a new Thought",
+          "description": "Route responsible for creating a new Thought",
+          "tags": ["Thoughts"],
+          "security": [{ "bearerAuth": [] }],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Thoughts"
+                },
+                "examples": {
+                  "Post": {
+                    "value": {
+                      "user": "",
+                      
+                      "title": "ECMAScript 6",
+                      "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                      "likes": [],
+                      "comments": []
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "401": {
+              "description": "Unauthorized"
+            },
+            "400": {
+              "description": "Not Found"
+            },
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json": {
+                  "schemma": {
+                    "type": "object",
+                    "$ref": "#/components/schemas/Post"
+                  }
+                }
+              }
+            }
+          }
+        }},
+        "/thoughts": { "get": {
+          "summary": "Search all Thoughts",
+          "description": "Route responsible for fetching all Thoughts",
+          "tags": ["Thoughts"],
+          "parameters": [
+            {
+              "in": "query",
+              "name": "limit",
+              "type": "string"
+            },
+            {
+              "in": "query",
+              "name": "offset",
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "400": {
+              "description": "Not Found"
+            },
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Thoughts"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }},
+        "/thoughts/top": {
+          "get": {
+            "summary": "Search top Thought",
+            "description": "Route responsible for fetching top Thought",
+            "tags": ["Thought"],
+            "responses": {
+              "400": {
+                "description": "Not Found"
+              },
+              "200": {
+                "description": "OK",
+                "content": {
+                  "application/json": {
+                    "schemma": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/Thought"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/thoughts/search": {
+          "get": {
+            "summary": "Search thoughts by title",
+            "description": "Route responsible for fetching the thoughts that match the title sent via query params",
+            "tags": ["Thoughts"],
+            "parameters": [
+              {
+                "in": "query",
+                "name": "title",
+                "type": "string",
+                "required": true
+              }
+            ],
+            "responses": {
+              "400": {
+                "description": "Not Found"
+              },
+              "200": {
+                "description": "OK",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Thoughts"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/thoughts/byUser": {
+          "get": {
+            "summary": "Search Thoughts by use id",
+            "description": "Route responsible for fetching Thoughts by use id",
+            "tags": ["Thoughts"],
+            "responses": {
+              "400": {
+                "description": "Not Found"
+              },
+              "401": {
+                "description": "Unauthorized"
+              },
+              "200": {
+                "description": "OK",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Thoughts"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/thoughts/{id}/": {
+          "patch": {
+            "summary": "Search Thought by id",
+            "description": "Route responsible for fetching post by id",
+            "tags": ["Thoughts"],
+            "security": [{ "bearerAuth": [] }],
+            "parameters": [
+              {
+                "in": "path",
+                "name": "id",
+                "type": "string",
+                "description": "Thought ID",
+                "required": true
+              }
+            ],
+            "responses": {
+              "401": {
+                "description": "Unauthorized"
+              },
+              "400": {
+                "description": "Not Found"
+              },
+              "200": {
+                "description": "OK",
+                "content": {
+                  "application/json": {
+                    "schemma": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/Thoughts"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/thoughts/{id}": {
+          "patch": {
+            "summary": "Update a thought",
+            "description": "Route responsible for updating a thought",
+            "tags": ["Thoughts"],
+            "security": [{ "bearerAuth": [] }],
+            "parameters": [
+              {
+                "in": "path",
+                "name": "id",
+                "type": "string",
+                "description": "Thought ID",
+                "required": true
+              }
+            ],
+            "requestBody": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Thoughts"
+                  },
+                  "examples": {
+                    "Post": {
+                      "value": {
+                    
+                        "title": "",
+                        "text": ""
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "responses": {
+              "401": {
+                "description": "Unauthorized"
+              },
+              "400": {
+                "description": "Not Found"
+              },
+              "200": {
+                "description": "OK",
+                "content": {
+                  "application/json": {
+                    "schemma": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/Post"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/thoughts/{id}/": {
+          "delete": {
+            "summary": "Delete a thought",
+            "description": "Route responsible for deleting a thought",
+            "tags": ["Thoughts"],
+            "security": [{ "bearerAuth": [] }],
+            "parameters": [
+              {
+                "in": "path",
+                "name": "id",
+                "type": "string",
+                "description": "Thought ID",
+                "required": true
+              }
+            ],
+            "responses": {
+              "401": {
+                "description": "Unauthorized"
+              },
+              "400": {
+                "description": "Not Found"
+              },
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
+        "/thoughts/like/{id}": {
+          "patch": {
+            "summary": "Like a thought",
+            "description": "Route responsible for liking a thought",
+            "tags": ["Thoughts"],
+            "security": [{ "bearerAuth": [] }],
+            "parameters": [
+              {
+                "in": "path",
+                "name": "id",
+                "type": "string",
+                "description": "User ID",
+                "required": true
+              }
+            ],
+            "responses": {
+              "401": {
+                "description": "Unauthorized"
+              },
+              "400": {
+                "description": "Not Found"
+              },
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
+        "/thoughts/comment/{id}": {
+          "patch": {
+            "summary": "Comment on a thought",
+            "description": "Route responsible for commenting on a thought",
+            "tags": ["Thoughts"],
+            "security": [{ "bearerAuth": [] }],
+            "parameters": [
+              {
+                "in": "path",
+                "name": "id",
+                "type": "string",
+                "description": "User ID",
+                "required": true
+              }
+            ],
+            "requestBody": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Comment"
+                  },
+                  "examples": {
+                    "Comment": {
+                      "value": {
+                        "message": "Comment successfully"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "responses": {
+              "401": {
+                "description": "Unauthorized"
+              },
+              "400": {
+                "description": "Not Found"
+              },
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
+        
+        "/thoughts/comment/{idThought}/{idComment}": {
+          "patch": {
+            "summary": "Delete Comment on a thought",
+            "description": "Route responsible for delete commenting on a thought",
+            "tags": ["Thoughts"],
+            "security": [{ "bearerAuth": [] }],
+            "parameters": [
+              {
+                "in": "path",
+                "name": "idThought",
+                "type": "string",
+                "description": "Thought ID",
+                "required": true
+              },
+              {
+                "in": "path",
+                "name": "idComment",
+                "type": "string",
+                "description": "Comment ID",
+                "required": true
+              }
+            ],
+            "requestBody": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Comment"
+                  },
+                  "examples": {
+                    "Comment": {
+                      "value": {
+                        "message": "Comment deleted successfully"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "responses": {
+              "401": {
+                "description": "Unauthorized"
+              },
+              "400": {
+                "description": "Not Found"
+              },
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        }
+
+        },
+    
+    "components": {
+        "securitySchemes": {
+          "bearerAuth": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT"
+          }
+        },
+        "schemas": {
+          "User": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "username": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              }
+             
+            }
+          },
+          "Thoughts": {
+            "type": "object",
+            "properties": {
+              "user": {
+                "type": "string"
+              },
+             
+              "title": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              },
+              "likes": {
+                "type": "number"
+              },
+              "comments": {
+                "type": "array"
+              },
+              "createdAt": {
+                "type": "date"
+              }
+            }
+          },
+          "Comment": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }

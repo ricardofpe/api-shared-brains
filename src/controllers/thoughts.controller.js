@@ -1,7 +1,7 @@
-import { createServicePensamentos, findAllPensamentosService, countPensamentos, topPensamentoService, findByIdService, searchByTitleService, byUserService, updateService, eraseService, likePensamentoService, deleteLikePensamentoService, addCommentService, deleteCommentService } from "../services/pensamentos.service.js"
+import { createServiceThoughts, findAllThoughtsService, countThoughts, topThoughtService, findByIdService, searchByTitleService, byUserService, updateService, eraseService, likeThoughtService, deleteLikeThoughtService, addCommentService, deleteCommentService } from "../services/thoughts.service.js"
 
 
-export const createPensamentos = async (req, res) => {
+export const createThoughts = async (req, res) => {
 
     try{
 
@@ -12,7 +12,7 @@ export const createPensamentos = async (req, res) => {
         }
 
 
-        await createServicePensamentos({
+        await createServiceThoughts({
 
             title,
             text,
@@ -29,7 +29,7 @@ export const createPensamentos = async (req, res) => {
 
 }
 
-export const findAllPensamentos = async (req, res) => {
+export const findAllThoughts = async (req, res) => {
 
     try{
 
@@ -47,8 +47,8 @@ export const findAllPensamentos = async (req, res) => {
             offset = 0
         }
 
-    const pensamentos = await findAllPensamentosService(offset, limit);
-    const total = await countPensamentos();
+    const thoughts = await findAllThoughtsService(offset, limit);
+    const total = await countThoughts();
     const currentUrl = req.baseUrl
 
     const next = offset + limit;
@@ -57,8 +57,8 @@ export const findAllPensamentos = async (req, res) => {
     const previous = offset - limit < 0 ? null : offset - limit
     const previousUrl = previous != null ? `${currentUrl}?limit=${limit}&offset=${previous}` : null
 
- if(pensamentos.length === 0){
-    return res.status(400).send({message: "There are no registred pensamentos"})
+ if(thoughts.length === 0){
+    return res.status(400).send({message: "There are no registred thoughts"})
    }
     res.send({
         nextUrl,
@@ -67,14 +67,14 @@ export const findAllPensamentos = async (req, res) => {
         offset,
         total,
 
-        results : pensamentos.map(pensamentosItem => ({
-            id: pensamentosItem._id,
-            title: pensamentosItem.title,
-            text: pensamentosItem.text,
-            likes: pensamentosItem.likes,
-            comments: pensamentosItem.comments,
-            name : pensamentosItem.user.name,
-            username: pensamentosItem.user.username
+        results : thoughts.map(thoughtsItem => ({
+            id: thoughtsItem._id,
+            title: thoughtsItem.title,
+            text: thoughtsItem.text,
+            likes: thoughtsItem.likes,
+            comments: thoughtsItem.comments,
+            name : thoughtsItem.user.name,
+            username: thoughtsItem.user.username
         }))
     })
 
@@ -85,23 +85,23 @@ export const findAllPensamentos = async (req, res) => {
 
 }
 
-export const topPensamento = async (req,res) => {
+export const topThought = async (req,res) => {
 
-    try{ const pensamento = await topPensamentoService();
+    try{ const thought = await topThoughtService();
 
-    if(!pensamento){
+    if(!thought){
         return res.status(400).send({message:"There is no registred post"})
     }
 
     res.send({
-        pensamentos:{
-        id: pensamento._id,
-            title: pensamento.title,
-            text: pensamento.text,
-            likes: pensamento.likes,
-            comments: pensamento.comments,
-            name : pensamento.user.name,
-            username: pensamento.user.username
+        thoughts:{
+        id: thought._id,
+            title: thought.title,
+            text: thought.text,
+            likes: thought.likes,
+            comments: thought.comments,
+            name : thought.user.name,
+            username: thought.user.username
         }
     })
 }catch(err){
@@ -115,17 +115,17 @@ export const findById = async(req,res) => {
     try{
         const {id} = req.params
 
-        const pensamento = await findByIdService(id)
+        const thought = await findByIdService(id)
 
         return res.send({
-            pensamentos:{
-                id: pensamento._id,
-                    title: pensamento.title,
-                    text: pensamento.text,
-                    likes: pensamento.likes,
-                    comments: pensamento.comments,
-                    name : pensamento.user.name,
-                    username: pensamento.user.username
+            thoughts:{
+                id: thought._id,
+                    title: thought.title,
+                    text: thought.text,
+                    likes: thought.likes,
+                    comments: thought.comments,
+                    name : thought.user.name,
+                    username: thought.user.username
                 }
 
         })
@@ -142,23 +142,23 @@ export const searchByTitle = async (req, res) => {
 
         const {title} = req.query;
 
-        const pensamento = await searchByTitleService(title);
+        const thought = await searchByTitleService(title);
 
-        if(pensamento.length === 0){
+        if(thought.length === 0){
             return res
             .status(400)
-            .send({message: "There are no pensamentos with this title"})
+            .send({message: "There are no thoughts with this title"})
         }
 
           return res.send({
-            results : pensamento.map(pensamentosItem => ({
-                id: pensamentosItem._id,
-                title: pensamentosItem.title,
-                text: pensamentosItem.text,
-                likes: pensamentosItem.likes,
-                comments: pensamentosItem.comments,
-                name : pensamentosItem.user.name,
-                username: pensamentosItem.user.username
+            results : thought.map(thoughtsItem => ({
+                id: thoughtsItem._id,
+                title: thoughtsItem.title,
+                text: thoughtsItem.text,
+                likes: thoughtsItem.likes,
+                comments: thoughtsItem.comments,
+                name : thoughtsItem.user.name,
+                username: thoughtsItem.user.username
             }))
         })
 
@@ -174,17 +174,17 @@ export const byUser = async (req, res) => {
     try{
         
         const id = req.userId
-        const pensamento = await byUserService(id)
+        const thought = await byUserService(id)
 
         return res.send({
-            results : pensamento.map(pensamentosItem => ({
-                id: pensamentosItem._id,
-                title: pensamentosItem.title,
-                text: pensamentosItem.text,
-                likes: pensamentosItem.likes,
-                comments: pensamentosItem.comments,
-                name : pensamentosItem.user.name,
-                username: pensamentosItem.user.username
+            results : thought.map(thoughtsItem => ({
+                id: thoughtsItem._id,
+                title: thoughtsItem.title,
+                text: thoughtsItem.text,
+                likes: thoughtsItem.likes,
+                comments: thoughtsItem.comments,
+                name : thoughtsItem.user.name,
+                username: thoughtsItem.user.username
             }))
         })
 
@@ -207,11 +207,11 @@ try{
  return   res.status(400).send({message:"Submit at least one field for update the post"})
    }
 
-   const pensamento = await findByIdService(id)
+   const thought = await findByIdService(id)
 
 
 
-   if(String(pensamento.user._id) !==  String(req.userId)){
+   if(String(thought.user._id) !==  String(req.userId)){
     return res.status(400).send({
         message: "You didn't update this post"
     })
@@ -237,10 +237,10 @@ export const erase = async(req, res) => {
         const {id} = req.params
 
       
-         const pensamento = await findByIdService(id)
+         const thought = await findByIdService(id)
       
             
-         if(String(pensamento.user._id) !==  String(req.userId)){
+         if(String(thought.user._id) !==  String(req.userId)){
           return res.status(400).send({
               message: "You didn't delete this post"
           })
@@ -258,16 +258,16 @@ export const erase = async(req, res) => {
 }
 
 
-export const likePensamento = async (req, res) =>{
+export const likeThought = async (req, res) =>{
 
     try{
 
         const {id} = req.params
         const userId = req.userId
 
-        const pensamentoLiked = await likePensamentoService(id, userId)
-        if(!pensamentoLiked){
-            await deleteLikePensamentoService(id, userId)
+        const thoughtLiked = await likeThoughtService(id, userId)
+        if(!thoughtLiked){
+            await deleteLikeThoughtService(id, userId)
             return res.status(200).send({message: "Like successfully removed"})
         }
         res.send({message: "Like done successfully"})
@@ -305,20 +305,24 @@ export const deleteComment = async (req,res) =>{
     try{
 
         
-        const{idPensamento, idComment} = req.params
+        const{idThought, idComment} = req.params
         const userId = req.userId
     
 
        
 
-      const commentDeleted =  await deleteCommentService(idPensamento, idComment ,userId)
+      const commentDeleted =  await deleteCommentService(idThought, idComment ,userId)
 
       const commentFinder = commentDeleted.comments.find(
         comment => comment.idComment === idComment
       )
 
+      if(!commentFinder){
+        return res.status(404).send({message:"Comment not found!"})
+      }
+
       if(commentFinder.userId !== userId){
-        return res.status(400).send({message:"You can't delete this comment"})
+        return res.status(400).send({message:"You can't delete this comment!"})
       }
 
         res.status(200).send({message:"Comment successfully removed!"})

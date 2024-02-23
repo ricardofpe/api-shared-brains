@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const PensamentosSchema = new mongoose.Schema({
+const thoughtsSchema = new mongoose.Schema({
 
     title:{
         type:String,
@@ -29,6 +29,6 @@ const PensamentosSchema = new mongoose.Schema({
     }
 })
 
-const Pensamentos = mongoose.model("Pensamentos", PensamentosSchema)
+const thoughts = mongoose.model("thoughts", thoughtsSchema)
 
-export default Pensamentos;
+export default thoughts;
