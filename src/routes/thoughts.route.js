@@ -3,11 +3,11 @@ const router = Router()
 
 import {createThoughts, findAllThoughts, findById, topThought, searchByTitle, byUser, update, erase, likeThought, addComment, deleteComment} from '../controllers/thoughts.controller.js'
 import { authMiddleware } from '../middlewares/auth.middleware.js'
-import { authCors } from '../middlewares/cors.middleware.js'
+
 
 
 router.post("/",   authMiddleware, createThoughts)
-router.get("/", authCors ,  findAllThoughts)
+router.get("/" ,  findAllThoughts)
 router.get("/top", topThought)
 router.get("/search", searchByTitle)
 router.get("/byUser" , authMiddleware, byUser)

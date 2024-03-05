@@ -1,6 +1,7 @@
 import express from 'express'
 import connectDatabase from "./src/database/db.js"
 import dotenv from 'dotenv'
+import cors from "cors";
 
 
 import userRoute from './src/routes/user.route.js'
@@ -18,6 +19,7 @@ const app = express()
 
 
 connectDatabase()
+app.use(cors());
 const port = process.env.PORT || 3000;
 
 
