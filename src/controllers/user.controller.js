@@ -1,3 +1,4 @@
+import { generateToken } from '../services/auth.service.js';
 import userService from '../services/user.service.js';
 
 
@@ -17,11 +18,19 @@ if(!user){
     return res.status(400).send({message: "Error creating User"})
 }
 
+const token = generateToken(user.id)
+
+     
+
+    
+
 res.status(201).send({
     message:"User created successfully",
     user:{
       id:user._id,  name, username, email 
-    },
+    },token
+
+    
 
    
 })}catch(err){
