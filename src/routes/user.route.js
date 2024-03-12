@@ -6,7 +6,8 @@ const router = Router()
 
 router.post("/",userController.create);
 router.get("/",userController.findAll);
-router.get("/:id", validId, validUser, userController.findById);
+router.get("/findById/:id?", validId, validUser, userController.findById);
 router.patch("/:id", validId, validUser, userController.update)
 
 export default router;
+
